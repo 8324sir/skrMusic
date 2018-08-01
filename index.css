@@ -174,8 +174,19 @@ footer{
   box-shadow: 0px -.25vh .25vh .25vh rgba(0, 0, 0, 0.2);
 }
 
+footer>.layout{
+  position: relative;
+}
+
 footer .box{
   position: relative;
+  overflow: hidden;
+  height: 24vh;
+}
+
+footer ul{
+  position: absolute;
+  left: 0;
 }
 
 footer ul::after{
