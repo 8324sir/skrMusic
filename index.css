@@ -154,6 +154,7 @@ main .area-bar .bar-progress{
   width: 10%;
   background-color: #fff;
   border-radius: .2vh;
+  transition: width .8s;
 }
 
 main .author{
@@ -216,6 +217,11 @@ footer h3{
   color: rgba(255, 255, 255, 0.6);
   margin-top: 1vh;
 }
+
+footer li.active{
+  box-shadow: 0 0 .5vh .5vh rgba(255, 255, 255, 0.2);
+}
+
 footer .fa{
   position: absolute;
   top: 9vh;
