@@ -78,7 +78,6 @@ var Footer = {
       url:'http://api.jirengu.com/fm/getChannels.php',
       dataType:'JSON',
     }).done(function(ret){
-      console.log(ret)
       _this.renderFooter(ret.channels)
     }).fail(function(){
       console.log('error')
@@ -86,7 +85,6 @@ var Footer = {
   },
   //渲染
   renderFooter:function(channels){
-    console.log(channels)
     var html = ''
     channels.forEach(function(channel){
       html += '<li data-channel-id='+channel.channel_id+' data-channel-name='+channel.name+'>'
@@ -116,12 +114,11 @@ var FM = {
   },
   bind: function(){
     var _this = this
+    //选择歌曲后开始加载音乐
     EventCenter.on('select-albumn',function(e,channelObj){
       _this.channelId = channelObj.channelId
       _this.channelName = channelObj.channelName
-      _this.loadMusic(function(){
-        _this.setMusic()
-      })
+      _this.loadMusic()
     })
     //歌曲播放暂停功能
     this.$container.find('.btn-play').on('click',function(){
@@ -136,9 +133,7 @@ var FM = {
     })
     //下一首
     this.$container.find('.btn-next').on('click',function(){
-      _this.loadMusic(function(){
-        _this.setMusic()
-      })
+      _this.loadMusic()
     })
 
     this.audio.addEventListener('play',function(){
@@ -162,9 +157,36 @@ var FM = {
       }
     }).done(function(ret){
       _this.song = ret['song'][0]
-      callback()
+      _this.setMusic()
+      _this.loadLyric()
     })
   },
+  
+  //加载歌词
+  loadLyric(){
+    var _this = this
+    $.ajax({
+      url:'//jirenguapi.applinzi.com/fm/getLyric.php',
+      dataType:'json',
+      data:{
+        sid:this.song.sid
+      }
+    }).done(function(ret){
+      var lyric = ret.lyric
+      var lyricObj = {}
+      lyric.split('\n').forEach(function(line){
+        var times = line.match(/\d{2}:\d{2}/g)
+        var str = line.replace(/\[.+?\]/g, '')
+        if(Array.isArray(times)){
+          times.forEach(function(time){
+            lyricObj[time] = str
+          })
+        }
+      })
+      _this.lyricObj = lyricObj
+    })
+  },
+
   setMusic(){
     console.log(this.song)
     this.audio.src = this.song.url
@@ -173,16 +195,20 @@ var FM = {
     this.$container.find('.detail h1').text(this.song.title)
     this.$container.find('.detail .author').text(this.song.artist)
     this.$container.find('.tag').text(this.channelName)
-    this.$container.find('.btn-play').removeClass('icon-play').addClass('icon-pause')
+    this.$container.find('.btn-play').removeClass('fa-play').addClass('fa-pause')
   },
+  //播放时间跟歌词进度条
   updateStatus(){
     var min = Math.floor(this.audio.currentTime / 60)
     var second = Math.floor(FM.audio.currentTime %60) + '';
-    console.log(min)
-    console.log(second)
     second = second.length === 2?second:'0' + second
     this.$container.find('.current-time').text(min + ':' + second)
     this.$container.find('.bar-progress').css('width',this.audio.currentTime/this.audio.duration*100+'%')
+    
+    var line = this.lyricObj['0' + min + ':' + second]
+    if(line){
+      this.$container.find('.lyric p').text(line)
+    }
   }
 
 }
