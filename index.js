@@ -75,7 +75,7 @@ var Footer = {
   render:function(){
     var _this = this
     $.ajax({
-      url:'//api.jirengu.com/fm/getChannels.php',
+      url:'//jirenguapi.applinzi.com/fm/getChannels.php',
       dataType:'json',
     }).done(function(ret){
       _this.renderFooter(ret.channels)
