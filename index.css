@@ -243,3 +243,7 @@ footer .fa-chevron-left{
 footer .fa-chevron-right{
   right: -8vh;
 }
+.boomText{
+  display: inline-block;
+  opacity: 1;
+}

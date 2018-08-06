@@ -188,7 +188,6 @@ var FM = {
   },
 
   setMusic(){
-    console.log(this.song)
     this.audio.src = this.song.url
     $('.bg').css('background-image','url('+this.song.picture+')')
     this.$container.find('.aside figure').css('background-image', 'url(' + this.song.picture +')')
@@ -207,10 +206,31 @@ var FM = {
     
     var line = this.lyricObj['0' + min + ':' + second]
     if(line){
-      this.$container.find('.lyric p').text(line)
+      this.$container.find('.lyric p').text(line).boomText()
     }
   }
+}
 
+//歌词的动画效果
+$.fn.boomText = function(type){
+  type = type || 'rollIn'
+  console.log(type)
+  this.html(function(){
+    var arr = $(this).text().split('').map(function(word){
+      return '<span class="boomText">' + word + '</span>'
+    })
+    return arr.join('')
+  })
+  
+  var index = 0
+  var $boomTexts = $(this).find('span')
+  var clock = setInterval(function(){
+    $boomTexts.eq(index).addClass('animated ' + type)
+    index++
+    if(index >= $boomTexts.length){
+      clearInterval(clock)
+    }
+  },300)
 }
 
 Footer.init()
