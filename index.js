@@ -78,6 +78,7 @@ var Footer = {
       url:'//jirenguapi.applinzi.com/fm/getChannels.php',
       dataType:'json',
     }).done(function(ret){
+      console.log(ret)
       _this.renderFooter(ret.channels)
     }).fail(function(){
       console.log('error')
@@ -114,6 +115,10 @@ var FM = {
   },
   bind: function(){
     var _this = this
+
+    //初始化页面。随机加载音乐
+    _this.loadMusic()
+
     //选择歌曲后开始加载音乐
     EventCenter.on('select-albumn',function(e,channelObj){
       _this.channelId = channelObj.channelId
@@ -156,6 +161,7 @@ var FM = {
         channel:this.channelId
       }
     }).done(function(ret){
+      console.log(ret)
       _this.song = ret['song'][0]
       _this.setMusic()
       _this.loadLyric()
@@ -187,6 +193,7 @@ var FM = {
     })
   },
 
+  //设置歌曲相关信息
   setMusic(){
     this.audio.src = this.song.url
     $('.bg').css('background-image','url('+this.song.picture+')')
@@ -214,7 +221,6 @@ var FM = {
 //歌词的动画效果
 $.fn.boomText = function(type){
   type = type || 'rollIn'
-  console.log(type)
   this.html(function(){
     var arr = $(this).text().split('').map(function(word){
       return '<span class="boomText">' + word + '</span>'
