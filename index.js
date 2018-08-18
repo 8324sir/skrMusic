@@ -110,6 +110,8 @@ var FM = {
     this.$container = $('#page-music')
     this.audio = new Audio()
     this.audio.autoplay = true
+    this.channelId = 'public_tuijian_rege'
+    this.channelName = '热歌'
 
     this.bind()
   },
@@ -139,6 +141,15 @@ var FM = {
     //下一首
     this.$container.find('.btn-next').on('click',function(){
       _this.loadMusic()
+    })
+    //收藏按钮
+    this.$container.find('.btn-collect').on('click',function(){
+      var $btn = $(this)
+      if($btn.hasClass('active')){
+        $btn.removeClass('active')
+      }else{
+        $(this).addClass('active')
+      }
     })
 
     this.audio.addEventListener('play',function(){

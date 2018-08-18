@@ -99,6 +99,10 @@ main .aside .fa:hover{
   color: #fff;
 }
 
+main .aside .fa.active{
+  color:#ff5722;
+}
+
 main .detail{
   margin-left: 56vh;
   color: #fff;
